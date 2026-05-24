@@ -63,7 +63,7 @@ Aonde se encontra os textos <step_1> que está em azul é a primeira entrada e b
 O segundo step <step_2> onde é amarela, bate com o segundo quadrado dentro do <memory> que também é amarelo e bate com a cor da <LLM>. Logo assistant é a <LLM>.
 O terceiro step <step_3> é verde, bate com o terceiro quadrado verde do <memory> que também é verde e bate com a cor do <harness>.
 
-Crie uma animação HTML onde mostra cada uma dessas chamadas dos textos mostrando 1 por um.
+Crie uma animação HTML na pasta @app onde mostra cada uma dessas chamadas dos textos mostrando 1 por um.
 - Quando mostrar o <step_1>, mostrar a imagem 1 dentro do <memory> que bate com a cor do user.
 - Quando mostrar o <step_2>, mostrar a imagem 1 e 2 dentro do <memory> e a imagem 2 é da cor da <LLM>.
 - Quando mostrar o <step_3>, mostrar a imagem 1, 2 e 3 dentro do <memory> e a imagem 3 é da cor do <harness>.
@@ -82,3 +82,4 @@ AÇÕES:
 
 #final
 salve o plano no arquivo prompt-final.md
+descreva de forma resumida o projeto no @README.md

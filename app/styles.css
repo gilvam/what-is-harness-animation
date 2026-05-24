@@ -1,0 +1,268 @@
+:root {
+  --blue:    #2E9BD6;
+  --blue-d:  #1f7fb0;
+  --yellow:  #E6B800;
+  --yellow-d:#B8941F;
+  --green:   #4F9E2E;
+  --green-d: #3c7a22;
+  --gray-b:  #555;
+  --ink:     #1a1a1a;
+  --bg:      #f4f6f8;
+  --panel:   #ffffff;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+  padding: 18px 22px 0;
+}
+
+/* ---------------- Cabeçalho ---------------- */
+.page-header h1 { margin: 0 0 4px; font-size: 22px; }
+.page-header h1 span { color: var(--blue); font-style: italic; }
+.subtitle { margin: 0 0 14px; color: #555; font-size: 13px; }
+.subtitle code { background: #e7eef3; padding: 1px 5px; border-radius: 4px; }
+
+/* ---------------- Layout geral ---------------- */
+.layout {
+  display: flex;
+  gap: 18px;
+  align-items: stretch;
+  flex-wrap: wrap;
+}
+.stage-wrap {
+  flex: 1 1 720px;
+  min-width: 0;
+  overflow-x: auto;
+  background: var(--panel);
+  border: 1px solid #e0e4e8;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+/* ---------------- Palco (coordenadas fixas) ---------------- */
+.stage {
+  position: relative;
+  width: 1000px;
+  height: 620px;
+  margin: 0 auto;
+}
+.wires {
+  position: absolute;
+  inset: 0;
+  width: 1000px;
+  height: 620px;
+  z-index: 1;
+  pointer-events: none;
+}
+.wire {
+  fill: none;
+  stroke: #222;
+  stroke-width: 2;
+}
+.flow-token {
+  fill: var(--blue);
+  opacity: 0;
+  filter: drop-shadow(0 0 4px rgba(0,0,0,.35));
+  transition: opacity .12s ease;
+}
+.flow-token.on { opacity: 1; }
+
+/* ---------------- Caixas ---------------- */
+.box {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: box-shadow .2s ease, transform .2s ease, opacity .2s ease, filter .2s ease;
+}
+
+.box-fs {
+  left: 407px; top: 21px; width: 124px; height: 56px;
+  background: #fff; border: 2px solid var(--gray-b); color: #222;
+}
+.box-harness {
+  left: 755px; top: 10px; width: 135px; height: 76px;
+  background: var(--green); border: 2px solid var(--green-d); color: #fff;
+}
+.box-llm {
+  left: 755px; top: 300px; width: 135px; height: 82px;
+  background: var(--yellow); border: 2px solid var(--yellow-d); color: #222;
+  letter-spacing: 2px; font-size: 18px;
+}
+.box-user {
+  left: 6px; top: 488px; width: 108px; height: 84px;
+  background: #fff; border: 2px solid var(--blue); color: #222; font-size: 17px;
+}
+.prompt-bar {
+  position: absolute; z-index: 2;
+  left: 196px; top: 490px; width: 18px; height: 80px;
+  background: var(--blue); border-radius: 3px;
+  transition: box-shadow .2s ease, transform .2s ease, opacity .2s ease;
+}
+
+/* ---------------- Context window ---------------- */
+.context-window {
+  position: absolute; z-index: 2;
+  left: 300px; top: 476px; width: 664px; height: 104px;
+  border: 2px solid #333; border-radius: 22px; background: #fff;
+}
+.blocks {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 0 16px;
+}
+.block {
+  width: 36px;
+  height: 76px;
+  border-radius: 2px;
+  flex: 0 0 auto;
+  transform-origin: bottom center;
+}
+.block.user    { background: var(--blue); }
+.block.assistant { background: var(--yellow); }
+.block.harness { background: var(--green); }
+.block.is-new  { animation: pop .42s ease; }
+@keyframes pop {
+  0%   { transform: scaleY(0); opacity: 0; }
+  60%  { transform: scaleY(1.12); opacity: 1; }
+  100% { transform: scaleY(1); }
+}
+
+/* ---------------- Rótulos ---------------- */
+.label { position: absolute; z-index: 2; text-align: center; }
+.tool-names {
+  position: absolute; z-index: 2;
+  left: 575px; top: 4px; width: 140px;
+  text-align: center; font-style: italic; font-weight: 700;
+  font-size: 13px; line-height: 1.45; color: #111;
+}
+.agentic {
+  left: 762px; top: 182px; width: 120px;
+  color: var(--blue); font-style: italic; font-weight: 700; font-size: 19px;
+  line-height: 1.15;
+}
+.tool-call   { left: 648px; top: 196px; width: 90px; font-style: italic; font-weight: 600; }
+.tool-return { left: 905px; top: 196px; width: 110px; font-style: italic; font-weight: 600; }
+.ctx-label   { left: 300px; top: 586px; width: 664px; font-size: 15px; }
+.code-name   { left: 8px; top: 424px; width: 178px; font-style: italic; color: #9aa0a6; font-size: 12px; }
+
+.code-snippet {
+  position: absolute; z-index: 2;
+  left: 8px; top: 358px; width: 178px; min-height: 60px;
+  margin: 0; padding: 8px 10px;
+  border: 1px solid #d7dbe0; border-radius: 4px; background: #fafafa;
+  color: #9aa0a6; font-size: 11.5px; line-height: 1.5;
+  font-family: "Consolas", "Courier New", monospace; white-space: pre;
+}
+.code-snippet.fixed { color: #2c7a2c; border-color: #bfe0bf; background: #f3fbf3; }
+
+/* ---------------- Estados ativo / inativo ---------------- */
+.box.dim, .prompt-bar.dim { opacity: .42; filter: grayscale(.3); }
+
+.box-user.active    { box-shadow: 0 0 0 4px rgba(46,155,214,.45), 0 0 18px rgba(46,155,214,.6); transform: scale(1.05); }
+.prompt-bar.active  { box-shadow: 0 0 0 4px rgba(46,155,214,.45), 0 0 14px rgba(46,155,214,.7); transform: scale(1.08); }
+.box-llm.active     { box-shadow: 0 0 0 4px rgba(230,184,0,.5), 0 0 20px rgba(230,184,0,.7); transform: scale(1.05); }
+.box-harness.active { box-shadow: 0 0 0 4px rgba(79,158,46,.5), 0 0 20px rgba(79,158,46,.7); transform: scale(1.05); }
+.box-fs.active      { box-shadow: 0 0 0 4px rgba(85,85,85,.4), 0 0 18px rgba(85,85,85,.45); transform: scale(1.05); border-color: #222; }
+
+/* ---------------- Painel de conversa ---------------- */
+.conversation {
+  flex: 0 0 330px;
+  display: flex;
+  flex-direction: column;
+  background: var(--panel);
+  border: 1px solid #e0e4e8;
+  border-radius: 10px;
+  max-height: 640px;
+}
+.conversation-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  padding: 12px 14px; border-bottom: 1px solid #eceff2;
+}
+.conversation-head h2 { margin: 0; font-size: 16px; }
+.progress { font-size: 13px; color: #666; font-variant-numeric: tabular-nums; }
+
+.log {
+  list-style: none;
+  margin: 0;
+  padding: 12px;
+  overflow-y: auto;
+  flex: 1;
+}
+.log-hint { color: #9aa0a6; font-size: 13px; font-style: italic; }
+
+.msg {
+  border-left: 5px solid #ccc;
+  background: #f7f9fb;
+  border-radius: 6px;
+  padding: 8px 10px;
+  margin-bottom: 9px;
+  font-size: 13px;
+  opacity: .85;
+  transition: opacity .2s ease, box-shadow .2s ease;
+}
+.msg .who { font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: .4px; }
+.msg .tool { font-style: italic; color: #444; }
+.msg .text { display: block; margin-top: 3px; font-family: "Consolas","Courier New",monospace; color: #222; word-break: break-word; }
+
+.msg.user      { border-left-color: var(--blue); }
+.msg.user .who { color: var(--blue-d); }
+.msg.assistant { border-left-color: var(--yellow); }
+.msg.assistant .who { color: var(--yellow-d); }
+.msg.harness   { border-left-color: var(--green); }
+.msg.harness .who { color: var(--green-d); }
+
+.msg.current {
+  opacity: 1;
+  box-shadow: 0 0 0 2px rgba(0,0,0,.06);
+  background: #fff;
+}
+
+/* ---------------- Controles ---------------- */
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 16px 0 22px;
+  padding: 12px 14px;
+  background: var(--panel);
+  border: 1px solid #e0e4e8;
+  border-radius: 10px;
+}
+.ctrl-btn {
+  font-size: 15px;
+  padding: 8px 14px;
+  border: 1px solid #cfd6dc;
+  background: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, transform .1s ease;
+}
+.ctrl-btn:hover:not(:disabled) { background: #eef3f7; border-color: #9fb3c2; }
+.ctrl-btn:active:not(:disabled) { transform: translateY(1px); }
+.ctrl-btn:disabled { opacity: .4; cursor: not-allowed; }
+.ctrl-play { font-weight: 700; min-width: 96px; background: var(--blue); color: #fff; border-color: var(--blue-d); }
+.ctrl-play:hover:not(:disabled) { background: var(--blue-d); }
+
+.speed { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #444; }
+.speed input[type="range"] { width: 150px; }
+.speed-val { font-variant-numeric: tabular-nums; width: 18px; text-align: center; font-weight: 700; }
+
+.hint { font-size: 12px; color: #888; margin-left: auto; }
+.hint kbd {
+  background: #eef1f4; border: 1px solid #cdd3d9; border-bottom-width: 2px;
+  border-radius: 4px; padding: 0 5px; font-family: inherit; font-size: 11px;
+}
