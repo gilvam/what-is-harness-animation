@@ -82,6 +82,8 @@ Blocos são cumulativos: no step `N` ficam visíveis os blocos `1..N`.
   - **harness** → `Harness→File System` (se FS ativo), `Harness→LLM` (tool return), `LLM→context`.
 - **Setas — geometria:** há folga entre as pontas das setas e as caixas; a seta `LLM→context`
   **sai da lateral esquerda da LLM** e **arqueia para cima** (não afunda).
+- **Barra do prompt:** a barra azul do prompt tem a **mesma largura dos blocos** da context
+  window, e logo **abaixo dela aparece o texto "prompt"** (como no diagrama original).
 - **Fim:** para no último step (sem loop); navegação manual permite revisar.
 
 ## Ações / controles (requisito)

@@ -103,7 +103,7 @@ body {
 }
 .prompt-bar {
   position: absolute; z-index: 2;
-  left: 196px; top: 490px; width: 18px; height: 80px;
+  left: 187px; top: 490px; width: 36px; height: 80px;
   background: var(--blue); border-radius: 3px;
   transition: box-shadow .2s ease, transform .2s ease, opacity .2s ease;
 }
@@ -155,6 +155,7 @@ body {
 .tool-call   { left: 648px; top: 196px; width: 90px; font-style: italic; font-weight: 600; }
 .tool-return { left: 905px; top: 196px; width: 110px; font-style: italic; font-weight: 600; }
 .ctx-label   { left: 300px; top: 586px; width: 664px; font-size: 15px; }
+.prompt-label { left: 175px; top: 574px; width: 60px; font-size: 14px; }
 .code-name   { left: 8px; top: 424px; width: 178px; font-style: italic; color: #9aa0a6; font-size: 12px; }
 
 .code-snippet {
