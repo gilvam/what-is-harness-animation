@@ -14,8 +14,8 @@ corrigir o arquivo `helloWorld.js`. A cada step a animação:
 
 - revela um bloco na **context window 200k** (memória acumulada, um a um);
 - acende as caixas corretas (**User / LLM / Harness / File System**);
-- anima o **fluxo de dados** ao longo das setas do diagrama;
-- registra a mensagem no **painel de conversa lateral**.
+- destaca as **setas** do caminho do step (ativas em preto, inativas em cinza);
+- registra a mensagem no **painel de conversa, à esquerda do palco**.
 
 ## Mapeamento de cores (fiel ao diagrama)
 
@@ -73,14 +73,15 @@ Blocos são cumulativos: no step `N` ficam visíveis os blocos `1..N`.
 ## Decisões de design (confirmadas)
 
 - **Layout:** réplica fiel do diagrama `harness-easy.jpg`.
-- **Texto dos steps:** painel de conversa lateral (log acumulativo, mensagem atual destacada).
+- **Texto dos steps:** painel de conversa **à esquerda** do palco (log acumulativo, mensagem
+  atual destacada).
 - **Fluxo (sem bolinha):** as **setas** do caminho do step atual ficam **pretas e mais grossas**;
   as demais ficam **cinza claro e finas** (o diagrama continua visível). Setas por ator:
   - **user** → `User→prompt`, `prompt→context`;
   - **assistant** → `context→LLM`, `LLM→context` (+ `LLM→Harness` se houver tool_call);
   - **harness** → `Harness→File System` (se FS ativo), `Harness→LLM` (tool return), `LLM→context`.
 - **Setas — geometria:** há folga entre as pontas das setas e as caixas; a seta `LLM→context`
-  **arqueia para cima** (não afunda).
+  **sai da lateral esquerda da LLM** e **arqueia para cima** (não afunda).
 - **Fim:** para no último step (sem loop); navegação manual permite revisar.
 
 ## Ações / controles (requisito)
@@ -108,5 +109,6 @@ Blocos são cumulativos: no step `N` ficam visíveis os blocos `1..N`.
    (File System em 3, 5, 7, 9, 11, 13).
 4. ◀ / ▶ (mouse) e ← / → (teclado) pausam o play e navegam; `Step N / 15` coerente.
 5. **Setas:** sem bolinha; só as setas do step atual ficam pretas/grossas, as demais cinza; a
-   seta `LLM→context` arqueia para cima e há folga entre as setas e as caixas.
-6. Comparar visualmente com `harness-easy.jpg`.
+   seta `LLM→context` **sai da esquerda da LLM**, arqueia para cima e há folga até as caixas.
+6. **Layout:** o painel de conversa fica **à esquerda** e o palco do diagrama à direita.
+7. Comparar visualmente com `harness-easy.jpg`.

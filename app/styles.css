@@ -178,6 +178,7 @@ body {
 
 /* ---------------- Painel de conversa ---------------- */
 .conversation {
+  order: -1;            /* conversa fica à esquerda do palco */
   flex: 0 0 330px;
   display: flex;
   flex-direction: column;
