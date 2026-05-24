@@ -74,8 +74,13 @@ Blocos são cumulativos: no step `N` ficam visíveis os blocos `1..N`.
 
 - **Layout:** réplica fiel do diagrama `harness-easy.jpg`.
 - **Texto dos steps:** painel de conversa lateral (log acumulativo, mensagem atual destacada).
-- **Fluxo:** animação de tokens percorrendo as setas (prompt→contexto, contexto→LLM, tool
-  call→Harness→File System, tool return→LLM).
+- **Fluxo (sem bolinha):** as **setas** do caminho do step atual ficam **pretas e mais grossas**;
+  as demais ficam **cinza claro e finas** (o diagrama continua visível). Setas por ator:
+  - **user** → `User→prompt`, `prompt→context`;
+  - **assistant** → `context→LLM`, `LLM→context` (+ `LLM→Harness` se houver tool_call);
+  - **harness** → `Harness→File System` (se FS ativo), `Harness→LLM` (tool return), `LLM→context`.
+- **Setas — geometria:** há folga entre as pontas das setas e as caixas; a seta `LLM→context`
+  **arqueia para cima** (não afunda).
 - **Fim:** para no último step (sem loop); navegação manual permite revisar.
 
 ## Ações / controles (requisito)
@@ -92,7 +97,7 @@ Blocos são cumulativos: no step `N` ficam visíveis os blocos `1..N`.
   barra de controles.
 - `app/styles.css` — cores fiéis à imagem, estados ativo/esmaecido, animações (pop dos blocos).
 - `app/script.js` — array `steps` (única fonte de verdade), `render(i)` idempotente, play/pause,
-  velocidade, teclado e animação de fluxo SVG.
+  velocidade, teclado e `getActiveWires(i)` (setas ativas por step).
 
 ## Como verificar
 
@@ -102,4 +107,6 @@ Blocos são cumulativos: no step `N` ficam visíveis os blocos `1..N`.
 3. Conferir, por step, blocos/cores corretos (2 verdes novos em 11 e 13) e caixas certas acesas
    (File System em 3, 5, 7, 9, 11, 13).
 4. ◀ / ▶ (mouse) e ← / → (teclado) pausam o play e navegam; `Step N / 15` coerente.
-5. Comparar visualmente com `harness-easy.jpg`.
+5. **Setas:** sem bolinha; só as setas do step atual ficam pretas/grossas, as demais cinza; a
+   seta `LLM→context` arqueia para cima e há folga entre as setas e as caixas.
+6. Comparar visualmente com `harness-easy.jpg`.

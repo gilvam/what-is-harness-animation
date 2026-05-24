@@ -1,7 +1,7 @@
 /* =========================================================================
    What is a Harness — animação do Agentic Loop
    Single source of truth: o array `steps`. Tudo (blocos, conversa, caixas
-   ativas e fluxo) é derivado dele.
+   e setas ativas) é derivado dele.
    ========================================================================= */
 
 // Ferramentas que tocam o File System
@@ -37,15 +37,12 @@ const WHO_LABEL = {
 const CODE_BROKEN = 'const msg = "hello world";\nconsole.log(message);';
 const CODE_FIXED  = 'const msg = "hello world";\nconsole.log(msg);';
 
-const TOKEN_COLOR = { user: '#2E9BD6', assistant: '#E6B800', harness: '#4F9E2E' };
-
 /* ----------------------------- Elementos ------------------------------ */
 const el = {
   blocks:   document.getElementById('blocks'),
   log:      document.getElementById('log'),
   progress: document.getElementById('progress'),
   code:     document.getElementById('code-snippet'),
-  token:    document.getElementById('flow-token'),
   boxUser:  document.getElementById('box-user'),
   prompt:   document.getElementById('prompt-bar'),
   boxLLM:   document.getElementById('box-llm'),
@@ -58,11 +55,13 @@ const el = {
   speedVal: document.getElementById('speed-val'),
 };
 
+// Todas as setas (paths) do diagrama — alternam entre ativa (preta) e inativa (cinza)
+const WIRES = document.querySelectorAll('.wire');
+
 /* ------------------------------- Estado ------------------------------- */
 let currentIndex = 0;   // 0 = nada exibido; 1..TOTAL = step atual
 let isPlaying = false;
 let playTimer = null;
-let flowGen = 0;        // geração para cancelar fluxos antigos
 
 /* --------------------------- Lógica de dados -------------------------- */
 // Quais caixas ficam ativas no step i (1-based)
@@ -113,6 +112,10 @@ function render(i, animateNew) {
   setBox(el.boxLLM, a.llm, i);
   setBox(el.boxHarness, a.harness, i);
   setBox(el.boxFS, a.fs, i);
+
+  // 2b) Setas: as do caminho do step atual ficam pretas; as demais cinza
+  const activeWires = new Set(getActiveWires(i));
+  WIRES.forEach((w) => w.classList.toggle('active', activeWires.has(w.id)));
 
   // 3) Snippet helloWorld.js (corrigido a partir do edit_file confirmado)
   const fixed = i >= 7;
@@ -171,91 +174,36 @@ function renderLog(i) {
   if (currentNode) currentNode.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
 }
 
-/* --------------------------- Animação de fluxo ------------------------ */
-function path(id) { return document.getElementById(id); }
-
-function animateAlong(pathEl, dur, gen) {
-  return new Promise((resolve) => {
-    const len = pathEl.getTotalLength();
-    const start = performance.now();
-    function frame(now) {
-      if (gen !== flowGen) { resolve(); return; }   // cancelado por novo render
-      let t = (now - start) / dur;
-      if (t > 1) t = 1;
-      const p = pathEl.getPointAtLength(len * t);
-      el.token.setAttribute('cx', p.x);
-      el.token.setAttribute('cy', p.y);
-      if (t < 1) requestAnimationFrame(frame);
-      else resolve();
-    }
-    requestAnimationFrame(frame);
-  });
-}
-
-function hideToken() {
-  el.token.classList.remove('on');
-  el.token.setAttribute('cx', -20);
-  el.token.setAttribute('cy', -20);
-}
-
-// Segmentos (ids de path) que o fluxo percorre em cada tipo de step.
-function flowSegments(i) {
+/* --------------------------- Setas ativas ----------------------------- */
+// Quais setas (ids de path) ficam pretas no step i — o "caminho" daquele step.
+function getActiveWires(i) {
+  if (i < 1) return [];
   const s = steps[i - 1];
   const a = getActive(i);
   if (s.actor === 'user') {
     return ['p-user-prompt', 'p-prompt-context'];
   }
   if (s.actor === 'assistant') {
-    const segs = ['p-context-llm', 'p-llm-context'];
-    if (s.tool) segs.push('p-llm-harness');          // tool call sobe pro Harness
-    return segs;
+    const wires = ['p-context-llm', 'p-llm-context'];
+    if (s.tool) wires.push('p-llm-harness');         // tool call sobe pro Harness
+    return wires;
   }
   // harness
-  const segs = [];
-  if (a.fs) segs.push('p-harness-fs', 'p-fs-harness'); // Harness <-> File System
-  segs.push('p-harness-llm', 'p-llm-context');         // tool return -> grava no contexto
-  return segs;
-}
-
-async function playFlow(i) {
-  flowGen++;                       // cancela qualquer fluxo anterior
-  const myGen = flowGen;
-  const s = steps[i - 1];
-  const segs = flowSegments(i);
-  const perSeg = Math.min(650, Math.max(220, stepInterval() * 0.4));
-
-  el.token.style.fill = TOKEN_COLOR[s.actor];
-  el.token.classList.add('on');
-
-  for (const id of segs) {
-    if (myGen !== flowGen) break;
-    const p = path(id);
-    if (!p) continue;
-    // posiciona no início do segmento antes de mostrar
-    const p0 = p.getPointAtLength(0);
-    el.token.setAttribute('cx', p0.x);
-    el.token.setAttribute('cy', p0.y);
-    await animateAlong(p, perSeg, myGen);
-  }
-  if (myGen === flowGen) hideToken();
+  const wires = [];
+  if (a.fs) wires.push('p-harness-fs');              // Harness -> File System
+  wires.push('p-harness-llm', 'p-llm-context');      // tool return -> grava no contexto
+  return wires;
 }
 
 /* --------------------------- Navegação -------------------------------- */
-function goTo(i, withFlow) {
+function goTo(i) {
   const target = Math.max(0, Math.min(TOTAL, i));
-  const advancing = target > currentIndex;
-  render(target, advancing);
-  if (withFlow && advancing && target >= 1) {
-    playFlow(target);
-  } else {
-    flowGen++;          // cancela fluxo em andamento
-    hideToken();
-  }
+  render(target, target > currentIndex);   // "pop" só ao avançar pra frente
 }
 
 function manualStep(delta) {
   pause();
-  goTo(currentIndex + delta, delta > 0);
+  goTo(currentIndex + delta);
 }
 
 /* ------------------------------ Play / Pause -------------------------- */
@@ -268,7 +216,7 @@ function scheduleTick(delay) {
   playTimer = setTimeout(() => {
     if (!isPlaying) return;
     if (currentIndex >= TOTAL) { pause(); return; }
-    goTo(currentIndex + 1, true);
+    goTo(currentIndex + 1);
     scheduleTick(stepInterval());
   }, delay);
 }

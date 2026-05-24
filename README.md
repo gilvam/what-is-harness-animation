@@ -8,7 +8,7 @@ A animação percorre, passo a passo, uma conversa real de exemplo — pedir par
 
 - os blocos da **context window 200k** surgindo um a um (memória acumulada);
 - quais componentes ficam **ativos** em cada step (User, LLM, Harness, File System);
-- o **fluxo de dados** animado ao longo das setas do diagrama;
+- o **fluxo** do step destacado nas **setas** (a seta do caminho atual fica preta; as demais cinza);
 - a conversa completa num **painel lateral** (User → LLM → Harness → ...).
 
 Cada step é colorido pelo seu ator: **azul** = user, **amarelo** = LLM (assistant),

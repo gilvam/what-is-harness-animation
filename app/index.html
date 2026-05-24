@@ -24,20 +24,20 @@
         <svg class="wires" viewBox="0 0 1000 620" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
           <defs>
             <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-              <path d="M0,0 L10,5 L0,10 z" fill="#222" />
+              <path d="M0,0 L10,5 L0,10 z" fill="#bbb" />
+            </marker>
+            <marker id="arrow-active" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0,0 L10,5 L0,10 z" fill="#000" />
             </marker>
           </defs>
 
-          <path id="p-user-prompt"    class="wire" d="M114,530 L188,530" marker-end="url(#arrow)" />
-          <path id="p-prompt-context" class="wire" d="M214,530 L292,528" marker-end="url(#arrow)" />
-          <path id="p-context-llm"    class="wire" d="M822,474 L822,388" marker-end="url(#arrow)" />
-          <path id="p-llm-context"    class="wire" d="M775,378 C600,470 470,505 330,474" marker-end="url(#arrow)" />
-          <path id="p-harness-fs"     class="wire" d="M753,49 L539,49" marker-end="url(#arrow)" />
-          <path id="p-llm-harness"    class="wire" d="M793,300 C742,250 742,140 802,88" marker-end="url(#arrow)" />
-          <path id="p-harness-llm"    class="wire" d="M850,88 C912,140 912,250 853,300" marker-end="url(#arrow)" />
-
-          <!-- token animado do fluxo de dados -->
-          <circle id="flow-token" class="flow-token" r="7" cx="-20" cy="-20" />
+          <path id="p-user-prompt"    class="wire" d="M123,530 L187,530" marker-end="url(#arrow)" />
+          <path id="p-prompt-context" class="wire" d="M223,530 L291,528" marker-end="url(#arrow)" />
+          <path id="p-context-llm"    class="wire" d="M822,468 L822,392" marker-end="url(#arrow)" />
+          <path id="p-llm-context"    class="wire" d="M768,392 C620,330 450,355 332,468" marker-end="url(#arrow)" />
+          <path id="p-harness-fs"     class="wire" d="M746,49 L540,49" marker-end="url(#arrow)" />
+          <path id="p-llm-harness"    class="wire" d="M792,292 C742,240 742,150 800,94" marker-end="url(#arrow)" />
+          <path id="p-harness-llm"    class="wire" d="M850,94 C912,150 912,242 853,292" marker-end="url(#arrow)" />
         </svg>
 
         <!-- Caixas / rótulos -->
